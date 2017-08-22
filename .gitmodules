@@ -1,0 +1,6 @@
+[submodule "External/kcp"]
+	path = External/kcp
+	url = https://github.com/skywind3000/kcp.git
+[submodule "External/asio"]
+	path = External/asio
+	url = https://github.com/chriskohlhoff/asio.git
