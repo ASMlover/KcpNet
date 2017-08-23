@@ -4,3 +4,6 @@
 [submodule "External/asio"]
 	path = External/asio
 	url = https://github.com/chriskohlhoff/asio.git
+[submodule "External/Chaos"]
+	path = External/Chaos
+	url = https://github.com/ASMlover/Chaos.git
