@@ -27,8 +27,8 @@
 #pragma once
 
 #include <asio.hpp>
-#include "Types.h"
 #include <Chaos/UnCopyable.h>
+#include "Types.h"
 #include "Callbacks.h"
 
 namespace KcpNet {
