@@ -1,2 +1,2 @@
-# **KcpNet: Network with KCP**
+# **KcpNet: Morden Networking library using KCP**
 ***
