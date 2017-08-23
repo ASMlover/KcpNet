@@ -26,6 +26,7 @@
 // POSSIBILITY OF SUCH DAMAGE.
 #include <chrono>
 #include <ikcp.h>
+#include <Chaos/Datetime/Timestamp.h>
 #include "Utility.h"
 #include "Session.h"
 #include "Server.h"
@@ -92,8 +93,9 @@ void Server::do_timer(void) {
   timer_.expires_from_now(std::chrono::milliseconds(5));
   timer_.async_wait([this](const std::error_code& ec) {
         if (!ec) {
+          auto clock = Chaos::get_millisec();
           for (auto& s : sessions_)
-            s.second->update(get_clock32());
+            s.second->update(clock);
         }
         do_timer();
       });

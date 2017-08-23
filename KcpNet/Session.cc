@@ -73,7 +73,7 @@ void Session::write_impl(const char* buf, std::size_t len) {
     write_fn_(shared_from_this(), std::string(buf, len));
 }
 
-void Session::update(std::uint32_t clock) {
+void Session::update(std::uint64_t clock) {
   ikcp_update(kcp_, clock);
 }
 

@@ -28,6 +28,7 @@
 
 #include <asio.hpp>
 #include "Types.h"
+#include <Chaos/UnCopyable.h>
 #include "Callbacks.h"
 
 namespace KcpNet {
@@ -35,7 +36,7 @@ namespace KcpNet {
 using asio::ip::udp;
 
 class Session
-  : private UnCopyable, public std::enable_shared_from_this<Session> {
+  : private Chaos::UnCopyable, public std::enable_shared_from_this<Session> {
   kcp_conv_t conv_{};
   ikcpcb* kcp_{};
   udp::endpoint sender_ep_;
@@ -50,7 +51,7 @@ public:
   Session(kcp_conv_t conv, const udp::endpoint& ep);
   ~Session(void);
 
-  void update(std::uint32_t clock);
+  void update(std::uint64_t clock);
   void input_handler(const char* buf, std::size_t len);
   void input_handler(const char* buf, std::size_t len, const udp::endpoint& ep);
   void write(const char* buf, std::size_t len);

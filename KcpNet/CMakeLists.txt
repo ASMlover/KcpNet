@@ -34,7 +34,8 @@ set(KCPNETLIB_SOURCES ${KCPNETLIB_SOURCES}
 message(STATUS "[KcpNet.KcpNet] KCPNETLIB_SOURCES: ${KCPNETLIB_SOURCES}")
 
 add_library(${OUTPUT_NAME} STATIC ${KCPNETLIB_SOURCES})
-if (CMAKE_SYSTEM_NAME MATCHES "Windows")
-else()
-  target_link_libraries(${OUTPUT_NAME} pthread)
-endif()
+target_link_libraries(${OUTPUT_NAME} chaos)
+# if (CMAKE_SYSTEM_NAME MATCHES "Windows")
+# else()
+#   target_link_libraries(${OUTPUT_NAME} pthread)
+# endif()

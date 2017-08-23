@@ -26,14 +26,11 @@
 // POSSIBILITY OF SUCH DAMAGE.
 #pragma once
 
-#include <cstddef>
 #include <cstdint>
 #include <string>
 
 namespace KcpNet {
 
-std::uint32_t get_clock32(void);
-std::uint64_t get_clock64(void);
 std::string make_connect_request(void);
 bool is_connect_request(const char* buf, std::size_t len);
 std::string make_connect_response(std::uint32_t conv);

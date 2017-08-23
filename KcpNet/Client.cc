@@ -25,6 +25,7 @@
 // ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 #include <chrono>
+#include <Chaos/Datetime/Timestamp.h>
 #include "Utility.h"
 #include "Session.h"
 #include "Client.h"
@@ -106,7 +107,7 @@ void Client::do_timer(void) {
   timer_.expires_from_now(std::chrono::milliseconds(5));
   timer_.async_wait([this](const std::error_code& ec) {
         if (!ec) {
-          auto clock = get_clock64();
+          std::int64_t clock = Chaos::get_millisec();
           if (connecting_) {
             if (clock - connect_begtime_ > kConnectTimeout) {
               connecting_ = false;
@@ -117,7 +118,7 @@ void Client::do_timer(void) {
           }
 
           if (connected_)
-            session_->update(static_cast<std::uint32_t>(clock));
+            session_->update(clock);
         }
         do_timer();
       });
@@ -143,7 +144,7 @@ void Client::connect(const std::string& remote_ip, std::uint16_t remote_port) {
         if (!ec) {
           connecting_ = true;
           connected_ = false;
-          connect_begtime_ = get_clock64();
+          connect_begtime_ = Chaos::get_millisec();
 
           do_read_connection();
           do_write_connecttion();

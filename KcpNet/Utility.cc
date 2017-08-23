@@ -24,12 +24,6 @@
 // LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
 // ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
-#include "Types.h"
-#if defined(KCPNET_WINDOWS)
-# include <Windows.h>
-#else
-# include <sys/time.h>
-#endif
 #include <cstring>
 #include "Utility.h"
 
@@ -39,36 +33,6 @@ static const char* kKcpNetConnectRequest = "kcpnet.connect.request";
 static constexpr std::size_t kKcpNetConnectRequestLen = 22;
 static const char* kKcpNetConnectResponse = "kcpnet.connect.response";
 static constexpr std::size_t kKcpNetConnectResponseLen = 23;
-
-#if defined(KCPNET_WINDOWS)
-static int gettimeofday(struct timeval* tv, struct timezone* /*tz*/) {
-  if (tv) {
-    FILETIME ft;
-    SYSTEMTIME st;
-    ULARGE_INTEGER uli;
-
-    GetSystemTime(&st);
-    SystemTimeToFileTime(&st, &ft);
-    uli.LowPart = ft.dwLowDateTime;
-    uli.HighPart = ft.dwHighDateTime;
-
-    tv->tv_sec = static_cast<long>(
-        (uli.QuadPart - 116444736000000000ULL) / 10000000L);
-    tv->tv_usec = static_cast<long>(st.wMilliseconds * 1000);
-  }
-  return 0;
-}
-#endif
-
-std::uint32_t get_clock32(void) {
-  return static_cast<std::uint32_t>(get_clock64() & 0xFFFFFFFF);
-}
-
-std::uint64_t get_clock64(void) {
-  struct timeval tv;
-  gettimeofday(&tv, nullptr);
-  return static_cast<std::uint64_t>(tv.tv_sec) * 1000 + (tv.tv_usec / 1000);
-}
 
 std::string make_connect_request(void) {
   return std::string(kKcpNetConnectRequest);

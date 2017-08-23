@@ -88,7 +88,7 @@ else()
   add_definitions(
     -DASIO_STANDALONE
     -DASIO_SEPARATE_COMPILATION)
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -std=c++1y -march=native")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Werror -std=c++1y -march=native")
   set(CMAKE_CXX_FLAGS_DEBUG "-g -ggdb -O0")
   set(CMAKE_CXX_FLAGS_RELEASE "-DNDEBUG -O3")
 endif()
@@ -96,9 +96,11 @@ string(TOUPPER ${CMAKE_BUILD_TYPE} BUILD_TYPE)
 message(STATUS "[KcpNet] CMAKE_CXX_FLAGS: ${CMAKE_CXX_FLAGS} ${CMAKE_CXX_FLAGS_${BUILD_TYPE}}")
 
 include_directories(${PROJECT_SOURCE_DIR})
+include_directories(${PROJECT_SOURCE_DIR}/External/Chaos)
 include_directories(${PROJECT_SOURCE_DIR}/External/kcp)
 include_directories(${PROJECT_SOURCE_DIR}/External/asio/asio/include)
 
+add_subdirectory(External/Chaos/Chaos)
 add_subdirectory(KcpNet)
 if (KCPNET_BUILD_SAMPLES)
   add_subdirectory(Samples)

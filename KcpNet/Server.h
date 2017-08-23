@@ -30,6 +30,7 @@
 #include <unordered_map>
 #include <asio.hpp>
 #include <asio/system_timer.hpp>
+#include <Chaos/UnCopyable.h>
 #include "Types.h"
 #include "Callbacks.h"
 
@@ -37,7 +38,7 @@ namespace KcpNet {
 
 using asio::ip::udp;
 
-class Server : private UnCopyable {
+class Server : private Chaos::UnCopyable {
   static constexpr std::size_t kBufferSize = 32 << 10;
 
   bool stopped_{};

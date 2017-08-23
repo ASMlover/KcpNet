@@ -29,6 +29,7 @@
 #include <vector>
 #include <asio.hpp>
 #include <asio/system_timer.hpp>
+#include <Chaos/UnCopyable.h>
 #include "Types.h"
 #include "Callbacks.h"
 
@@ -36,7 +37,7 @@ namespace KcpNet {
 
 using asio::ip::udp;
 
-class Client : private UnCopyable {
+class Client : private Chaos::UnCopyable {
   static constexpr std::size_t kBufferSize = 32 << 10;
   static constexpr std::uint64_t kConnectTimeout = 5000;
 

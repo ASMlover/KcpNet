@@ -26,35 +26,8 @@
 // POSSIBILITY OF SUCH DAMAGE.
 #pragma once
 
-#if defined(_WIN32) || defined(_WIN64) || defined(_WINDOWS_) || \
-  defined(_MSC_VER) || defined(__MINGW32__) || defined(__MINGW64__)
-# define KCPNET_WINDOWS
-#elif defined(linux) || defined(__linux) || defined(__linux__)
-# define KCPNET_LINUX
-#elif defined(macintosh) || defined(__APPLE__) || defined(__MACH__)
-# define KCPNET_DARWIN
-#else
-# error "Unknown Platform."
-#endif
-
-#if defined(KCPNET_LINUX) || defined(KCPNET_DARWIN)
-# define KCPNET_POSIX
-#endif
-
 #include <cstdint>
 
 struct IKCPCB;
 using ikcpcb = struct IKCPCB;
 using kcp_conv_t = std::uint32_t;
-
-namespace KcpNet {
-
-class UnCopyable {
-  UnCopyable(const UnCopyable&) = delete;
-  UnCopyable& operator=(const UnCopyable&) = delete;
-protected:
-  UnCopyable(void) = default;
-  ~UnCopyable(void) = default;
-};
-
-}
