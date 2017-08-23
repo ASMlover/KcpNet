@@ -74,7 +74,7 @@ void Session::write_impl(const char* buf, std::size_t len) {
 }
 
 void Session::update(std::uint64_t clock) {
-  ikcp_update(kcp_, clock);
+  ikcp_update(kcp_, static_cast<std::uint32_t>(clock));
 }
 
 void Session::input_handler(const char* buf, std::size_t len) {

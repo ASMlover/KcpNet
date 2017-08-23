@@ -65,7 +65,7 @@ if (CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
     /D_CRT_NONSTDC_NO_WARNINGS
     /DASIO_STANDALONE
     /DASIO_SEPARATE_COMPILATION
-    /D_WIN32_WINNT=0x0501
+    /D_WIN32_WINDOWS
     /wd4267 # fixed warnning '=': from 'size_t' to 'IUINT32' for kcp
     /wd4996 # fixed warnning for asio
     )
