@@ -27,7 +27,7 @@
 
 set(OUTPUT_NAME "kcpnet")
 
-aux_source_directory(. KCPNETLIB_SOURCES)
+file(GLOB_RECURSE KCPNETLIB_SOURCES *.cc)
 set(KCPNETLIB_SOURCES ${KCPNETLIB_SOURCES}
   ${PROJECT_SOURCE_DIR}/External/kcp/ikcp.c
   ${PROJECT_SOURCE_DIR}/External/asio/asio/src/asio.cpp)
