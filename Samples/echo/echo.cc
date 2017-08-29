@@ -26,9 +26,7 @@
 // POSSIBILITY OF SUCH DAMAGE.
 #include <iostream>
 #include <asio.hpp>
-#include <KcpNet/Session.h>
-#include <KcpNet/Client.h>
-#include <KcpNet/Server.h>
+#include <KcpNet/KcpNet.h>
 
 void echo_client(void) {
   asio::io_context io_context;
