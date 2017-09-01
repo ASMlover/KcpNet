@@ -54,6 +54,8 @@ void Server::do_read(void) {
   if (stopped_)
     return;
 
+  // FIXME: on Windows build with Debug mode, receive data is garbled,
+  //        with Release mode, it's OK? it's bug of asio?
   socket_.async_receive_from(asio::buffer(readbuff_), sender_ep_,
       [this](const std::error_code& ec, std::size_t n) {
         if (!ec && n > 0) {
@@ -108,12 +110,12 @@ kcp_conv_t Server::gen_conv(void) const {
 
 void Server::write_udp(
     const char* buf, std::size_t len, const udp::endpoint& ep) {
-  write_udp(std::string(buf, len), ep);
+  socket_.async_send_to(asio::buffer(buf, len), ep,
+      [](const std::error_code& /*ec*/, std::size_t /*n*/) {});
 }
 
 void Server::write_udp(const std::string& buf, const udp::endpoint& ep) {
-  socket_.async_send_to(asio::buffer(buf), ep,
-      [](const std::error_code& /*ec*/, std::size_t /*n*/) {});
+  write_udp(buf.data(), buf.size(), ep);
 }
 
 }
