@@ -54,8 +54,6 @@ void Server::do_read(void) {
   if (stopped_)
     return;
 
-  // FIXME: on Windows build with Debug mode, receive data is garbled,
-  //        with Release mode, it's OK? it's bug of asio?
   socket_.async_receive_from(asio::buffer(readbuff_), sender_ep_,
       [this](const std::error_code& ec, std::size_t n) {
         if (!ec && n > 0) {
