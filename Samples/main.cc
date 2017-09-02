@@ -31,17 +31,26 @@
 void run_client(void) {
   asio::io_context io_context;
 
+  auto write_fn = [](const KcpNet::SessionPtr& s) {
+    static std::int32_t counter = 0;
+    char buf[1024];
+    auto n = std::snprintf(
+        buf, sizeof(buf), "KcpNet::Client sample - @counter=%d", ++counter);
+    s->write(buf, n);
+  };
+
   KcpNet::Client c(io_context, 5656);
   c.bind_error_functor([](void) {
         std::cout << "connect to(127.0.0.1:5555) failed ..." << std::endl;
       });
-  c.bind_connecttion_functor([](const KcpNet::SessionPtr& s) {
+  c.bind_connecttion_functor([write_fn](const KcpNet::SessionPtr& s) {
         std::cout << "connect to(127.0.0.1:5555) success ..." << std::endl;
-        s->write("Hello, world!");
+        write_fn(s);
       });
   c.bind_message_functor(
-      [](const KcpNet::SessionPtr& /*s*/, const std::string& buf) {
+      [write_fn](const KcpNet::SessionPtr& s, const std::string& buf) {
         std::cout << "from(127.0.0.1:5555) read: " << buf << std::endl;
+        write_fn(s);
       });
   c.connect("127.0.0.1", 5555);
 
