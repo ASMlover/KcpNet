@@ -58,28 +58,27 @@ void Server::do_read(void) {
       [this](const std::error_code& ec, std::size_t n) {
         if (!ec && n > 0) {
           if (is_connect_request(readbuff_.data(), n)) {
-            write_udp(make_connect_response(gen_conv()), sender_ep_);
+            auto conv = gen_conv();
+            auto s = std::make_shared<Session>(conv, sender_ep_);
+            s->bind_message_functor(message_fn_);
+            s->bind_write_functor(
+                [this](const SessionPtr& sp, const std::string& buf) {
+                  write_udp(buf, sp->get_endpoint());
+                });
+            sessions_[conv] = s;
+
+            if (connection_fn_)
+              connection_fn_(s);
+
+            write_udp(make_connect_response(conv), sender_ep_);
           }
           else {
             auto conv = ikcp_getconv(readbuff_.data());
-            SessionPtr s{};
             auto it = sessions_.find(conv);
-            if (it == sessions_.end()) {
-              s = std::make_shared<Session>(conv, sender_ep_);
-              s->bind_message_functor(message_fn_);
-              s->bind_write_functor(
-                  [this](const SessionPtr& sp, const std::string& buf) {
-                    write_udp(buf, sp->get_endpoint());
-                  });
-              sessions_[conv] = s;
-
-              if (connection_fn_)
-                connection_fn_(s);
+            if (it != sessions_.end()) {
+              auto s = it->second;
+              s->input_handler(readbuff_.data(), n, sender_ep_);
             }
-            else {
-              s = it->second;
-            }
-            s->input_handler(readbuff_.data(), n, sender_ep_);
           }
         }
         do_read();
