@@ -43,7 +43,7 @@ void run_client(void) {
   c.bind_error_functor([](void) {
         std::cout << "connect to(127.0.0.1:5555) failed ..." << std::endl;
       });
-  c.bind_connecttion_functor([write_fn](const KcpNet::SessionPtr& s) {
+  c.bind_connection_functor([write_fn](const KcpNet::SessionPtr& s) {
         std::cout << "connect to(127.0.0.1:5555) success ..." << std::endl;
         write_fn(s);
       });
@@ -61,7 +61,7 @@ void run_server(void) {
   asio::io_context io_context;
 
   KcpNet::Server s(io_context, 5555);
-  s.bind_connecttion_functor([](const KcpNet::SessionPtr& sp) {
+  s.bind_connection_functor([](const KcpNet::SessionPtr& sp) {
         std::cout
           << "accept session from {" << sp->get_endpoint()
           << ", " << sp->get_conv() << "}" << std::endl;

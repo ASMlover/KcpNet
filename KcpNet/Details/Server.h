@@ -59,11 +59,11 @@ public:
   Server(asio::io_context& io_context, std::uint16_t port);
   ~Server(void);
 
-  void bind_connecttion_functor(const ConnectionCallback& fn) {
+  void bind_connection_functor(const ConnectionCallback& fn) {
     connection_fn_ = fn;
   }
 
-  void bind_connecttion_functor(ConnectionCallback&& fn) {
+  void bind_connection_functor(ConnectionCallback&& fn) {
     connection_fn_ = std::move(fn);
   }
 

@@ -32,7 +32,7 @@ void echo_client(void) {
   asio::io_context io_context;
 
   KcpNet::Client c(io_context, 5656);
-  c.bind_connecttion_functor([](const KcpNet::SessionPtr& s) {
+  c.bind_connection_functor([](const KcpNet::SessionPtr& s) {
         s->write("Hello, world!");
       });
   c.bind_message_functor(
