@@ -36,8 +36,9 @@ void echo_client(void) {
         s->write("Hello, world!");
       });
   c.bind_message_functor(
-      [](const KcpNet::SessionPtr& /*s*/, const std::string& buf) {
+      [&c](const KcpNet::SessionPtr& /*s*/, const std::string& buf) {
         std::cout << "from(127.0.0.1:5555) read: " << buf << std::endl;
+        c.disconnect();
       });
   c.connect("127.0.0.1", 5555);
 
