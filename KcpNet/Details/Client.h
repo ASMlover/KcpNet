@@ -63,6 +63,7 @@ public:
   Client(asio::io_context& io_context, std::uint16_t port);
   ~Client(void);
   void connect(const std::string& remote_ip, std::uint16_t remote_port);
+  void disconnect(void);
 
   void bind_error_functor(const ErrorCallback& fn) {
     error_fn_ = fn;

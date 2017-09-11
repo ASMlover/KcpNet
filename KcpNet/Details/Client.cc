@@ -36,13 +36,17 @@ Client::Client(asio::io_context& io_context, std::uint16_t port)
   : socket_(io_context, udp::endpoint(udp::v4(), port))
   , timer_(io_context)
   , readbuff_(kBufferSize) {
+  asio::socket_base::reuse_address option(true);
+  socket_.set_option(option);
 }
 
 Client::~Client(void) {
-  stopped_ = false;
+  stopped_ = true;
 
-  socket_.cancel();
-  socket_.close();
+  if (socket_.is_open()) {
+    socket_.shutdown(udp::socket::shutdown_both);
+    socket_.close();
+  }
   timer_.cancel();
 }
 
@@ -135,6 +139,7 @@ void Client::write_udp(const std::string& buf) {
 }
 
 void Client::connect(const std::string& remote_ip, std::uint16_t remote_port) {
+  stopped_ = false;
   connecting_ = false;
   connected_ = false;
 
@@ -143,6 +148,7 @@ void Client::connect(const std::string& remote_ip, std::uint16_t remote_port) {
   socket_.async_connect(remote_ep,
       [this](const std::error_code& ec) {
         if (!ec) {
+          stopped_ = false;
           connecting_ = true;
           connected_ = false;
           connect_begtime_ = Chaos::get_millisec();
@@ -156,6 +162,14 @@ void Client::connect(const std::string& remote_ip, std::uint16_t remote_port) {
             error_fn_();
         }
       });
+}
+
+void Client::disconnect(void) {
+  stopped_ = true;
+
+  socket_.shutdown(udp::socket::shutdown_both);
+  socket_.close();
+  timer_.cancel();
 }
 
 }
