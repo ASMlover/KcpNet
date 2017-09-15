@@ -27,7 +27,7 @@
 #pragma once
 
 #include <asio.hpp>
-#include <Chaos/UnCopyable.h>
+#include <Chaos/Base/UnCopyable.h>
 #include "Types.h"
 #include "Callbacks.h"
 
