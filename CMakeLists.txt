@@ -25,7 +25,7 @@
 # ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-cmake_minimum_required(VERSION 3.0)
+cmake_minimum_required(VERSION 3.14)
 project(KcpNet C CXX)
 
 if (POLICY CMP0025)
@@ -53,8 +53,8 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 option(KCPNET_BUILD_SAMPLES "build samples ?" ON)
 
 if (CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
-  if (MSVC_VERSION LESS 1900)
-    message(FATAL_ERROR "you need Virsual Studio 2015 or later")
+  if (MSVC_VERSION LESS 1910)
+    message(FATAL_ERROR "you need Virsual Studio 2017 or later")
     return()
   endif()
 
@@ -69,18 +69,18 @@ if (CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
     /wd4267 # fixed warnning '=': from 'size_t' to 'IUINT32' for kcp
     /wd4996 # fixed warnning for asio
     )
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W3 /GF /GS /Gs /Zi /EHsc")
-  set(CMAKE_CXX_FLAGS_DEBUG "/D_DEBUG /MDd")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W3 /GF /GS /Gs /Zi /EHsc /std:c++latest")
+  set(CMAKE_CXX_FLAGS_DEBUG "/D_DEBUG /MDd /Od")
   set(CMAKE_CXX_FLAGS_RELEASE "/DNDEBUG /MD /Ox")
 else()
   if (CMAKE_CXX_COMPILER_ID MATCHES "GNU")
-    if (CMAKE_CXX_COMPILER_VERSION VERSION_LESS "4.8.1")
-      message(FATAL_ERROR "you need GCC-4.8.1 or later")
+    if (CMAKE_CXX_COMPILER_VERSION VERSION_LESS "7.1.0")
+      message(FATAL_ERROR "you need GCC-7.1.0 or later")
       return()
     endif()
   elseif (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-    if (CMAKE_CXX_COMPILER_VERSION VERSION_LESS "3.3")
-      message(FATAL_ERROR "you need Clang-3.3 or later")
+    if (CMAKE_CXX_COMPILER_VERSION VERSION_LESS "5.0")
+      message(FATAL_ERROR "you need Clang-5.0 or later")
       return()
     endif()
   endif()
@@ -88,7 +88,7 @@ else()
   add_definitions(
     -DASIO_STANDALONE
     -DASIO_SEPARATE_COMPILATION)
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Werror -std=c++1y -march=native")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Werror -std=c++1z -march=native")
   set(CMAKE_CXX_FLAGS_DEBUG "-g -ggdb -O0")
   set(CMAKE_CXX_FLAGS_RELEASE "-DNDEBUG -O3")
 endif()
@@ -99,6 +99,8 @@ include_directories(${PROJECT_SOURCE_DIR})
 include_directories(${PROJECT_SOURCE_DIR}/External/Chaos)
 include_directories(${PROJECT_SOURCE_DIR}/External/kcp)
 include_directories(${PROJECT_SOURCE_DIR}/External/asio/asio/include)
+
+include(Common.cmake)
 
 add_subdirectory(External/Chaos/Chaos)
 add_subdirectory(KcpNet)
