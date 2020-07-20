@@ -26,7 +26,7 @@
 # POSSIBILITY OF SUCH DAMAGE.
 
 cmake_minimum_required(VERSION 3.14)
-project(KcpNet C CXX)
+project(KcpNet CXX C)
 
 if (POLICY CMP0025)
   cmake_policy(SET CMP0025 NEW)
@@ -78,11 +78,13 @@ else()
       message(FATAL_ERROR "you need GCC-7.1.0 or later")
       return()
     endif()
+    add_definitions(-Wno-format-truncation)
   elseif (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
     if (CMAKE_CXX_COMPILER_VERSION VERSION_LESS "5.0")
       message(FATAL_ERROR "you need Clang-5.0 or later")
       return()
     endif()
+    add_definitions(-Wno-unused-private-field)
   endif()
 
   add_definitions(
